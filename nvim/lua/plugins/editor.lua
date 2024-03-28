@@ -14,6 +14,12 @@ return {
       "nvim-telescope/telescope-file-browser.nvim",
       "xiyaowong/telescope-emoji.nvim",
       --"nvim-lua/plenary.nvim",
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
+        -- This will not install any breaking changes.
+        -- For major updates, this must be adjusted manually.
+        version = "^1.0.0",
+      },
     },
     keys = {
       {
@@ -41,7 +47,17 @@ return {
         ";r",
         function()
           local builtin = require("telescope.builtin")
+          -- require("telescope").extensions.live_grep_args.live_grep_args()
           builtin.live_grep()
+        end,
+        desc = "Search for a string in your current working directory and get results live as you type, respects .gitignore",
+      },
+      {
+        ";g",
+        function()
+          --local builtin = require("telescope.builtin")
+          require("telescope").extensions.live_grep_args.live_grep_args()
+          --builtin.live_grep()
         end,
         desc = "Search for a string in your current working directory and get results live as you type, respects .gitignore",
       },
@@ -138,6 +154,23 @@ return {
         end,
         desc = "Open File Browser with the path of the current buffer",
       },
+      {
+        ";d",
+        function()
+          local telescope = require("telescope")
+          telescope.extensions.file_browser.file_browser({
+            path = vim.fn.getcwd(),
+            cwd = telescope_buffer_dir(),
+            respect_gitignore = false,
+            hidden = true,
+            grouped = true,
+            previewer = false,
+            initial_mode = "normal",
+            layout_config = { height = 40 },
+          })
+        end,
+        desc = "Open File Browser with the path of the current buffer",
+      },
     },
     config = function(_, opts)
       local telescope = require("telescope")
@@ -152,6 +185,7 @@ return {
           },
         },
       }
+
       opts.extensions = {
         file_browser = {
           theme = "dropdown",
@@ -166,6 +200,7 @@ return {
           git_status = true,
           layout_config = { height = 40 },
           select_buffer = true,
+          initial_mode = "insert",
           mappings = {
             -- your custom insert mode mappings
             ["n"] = {
@@ -190,6 +225,9 @@ return {
             },
           },
         },
+        live_grep_args = {
+          search_dirs = { vim.fn.expand("%:p:h") },
+        },
         emoji = {
           action = function(emoji)
             -- argument emoji is a table.
@@ -206,6 +244,7 @@ return {
       --require("telescope").load_extension("fzf")
       require("telescope").load_extension("file_browser")
       require("telescope").load_extension("emoji")
+      require("telescope").load_extension("live_grep_args")
     end,
   },
   {

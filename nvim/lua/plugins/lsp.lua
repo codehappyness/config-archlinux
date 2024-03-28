@@ -12,6 +12,7 @@ return {
         "tailwindcss-language-server",
         "typescript-language-server",
         "css-lsp",
+        "intelephense",
       })
     end,
   },
@@ -20,8 +21,25 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       inlay_hints = { enabled = true },
-      ---@type lspconfig.options
+      --@type lspconfig.options
       servers = {
+        --intelephense = {
+        --  format = {
+        --    braces = "k&r",
+        --  },
+        --},
+        intelephense = {
+          filetypes = { "php", "blade" },
+          settings = {
+            intelephense = {
+              filetypes = { "php", "blade" },
+              files = {
+                associations = { "*.php", "*.blade.php" }, -- Associating .blade.php files as well
+                maxSize = 5000000,
+              },
+            },
+          },
+        },
         cssls = {},
         tailwindcss = {
           root_dir = function(...)
