@@ -3,6 +3,10 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      -- Add nvim-ts-autotag
+      { "windwp/nvim-ts-autotag" },
+    },
     opts = {
       ensure_installed = {
         "astro",
@@ -22,8 +26,12 @@ return {
         "sql",
         "svelte",
         "dart",
+        "prisma",
       },
-
+      autotag = {
+        -- Setup autotag using treesitter config.
+        enable = true,
+      },
       -- matchup = {
       -- 	enable = true,
       -- },
@@ -86,6 +94,9 @@ return {
       })
       vim.treesitter.language.register("markdown", "mdx")
       require("nvim-treesitter.configs").setup(opts)
+      if type(opts.ensure_installed) == "table" then
+        vim.list_extend(opts.ensure_installed, { "markdown", "markdown_inline" })
+      end
     end,
   },
 }
