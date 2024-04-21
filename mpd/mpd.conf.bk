@@ -1,0 +1,33 @@
+music_directory		"~/music"
+playlist_directory		"~/.mpd/playlists"
+db_file			"~/.mpd/database"
+log_file			"~/.mpd/log"
+
+#
+state_file			"~/.mpd/state"
+#
+# The location of the sticker database.  This is a database which
+# manages dynamic information attached to songs.
+#
+sticker_file			"~/.mpd/sticker.sql"
+#
+restore_paused "yes"
+#
+#
+auto_update	"yes"
+port "6600"
+#
+# Limit the depth of the directories being watched, 0 means only watch
+# the music directory itself.  There is no limit by default.
+#
+auto_update_depth "0"
+#
+audio_output {
+        type            "pipewire"
+        name            "PipeWire Sound Server"
+}
+decoder {
+       plugin                   "wildmidi"
+       enabled                  "no"
+       config_file              "/etc/timidity/timidity.cfg"
+}
